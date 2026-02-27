@@ -4,39 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Felix AI</title>
-    <link rel="stylesheet" href="./styling.css" />
+    <link rel="stylesheet" href="styling.css" />
   </head>
+
   <body>
-    <main class="app">
-      <header class="header">
-        <div class="logo-circle"></div>
+    <div class="chat-wrapper">
+      <div class="chat-header">
+        <div class="pawprints">🐾 🐾</div>
+
         <div>
           <h1>Felix AI</h1>
           <p>Your intelligent feline assistant</p>
         </div>
-      </header>
+      </div>
 
-      <section class="chat-container">
-        <ul id="messageList" class="messages">
-          <li class="message bot">
-            <div class="bubble">
-              Meow 🐾 I'm Felix. Ask me anything.
-            </div>
-          </li>
-        </ul>
+      <ul id="chatWindow" class="chat-window">
+        <li class="bot-message">Meow 🐾 I'm Felix. Ask me anything.</li>
+      </ul>
 
-        <form id="chatForm" class="input-area">
-          <input
-            id="messageInput"
-            type="text"
-            placeholder="Type your message..."
-            required
-          />
-          <button type="submit">Send</button>
-        </form>
-      </section>
-    </main>
+      <div id="thinking" class="thinking hidden">purrrrocessing....</div>
 
-    <script src="./app.js"></script>
+      <form id="chatForm" class="input-area">
+        <input
+          id="messageInput"
+          type="text"
+          placeholder="Type your message..."
+          required
+        />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+
+    <script src="app.js"></script>
   </body>
 </html>
