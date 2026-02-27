@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Felix AI</title>
+    <link rel="stylesheet" href="./styling.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <div class="logo-circle"></div>
+        <div>
+          <h1>Felix AI</h1>
+          <p>Your intelligent feline assistant</p>
+        </div>
+      </header>
+
+      <section class="chat-container">
+        <ul id="messageList" class="messages">
+          <li class="message bot">
+            <div class="bubble">
+              Meow 🐾 I'm Felix. Ask me anything.
+            </div>
+          </li>
+        </ul>
+
+        <form id="chatForm" class="input-area">
+          <input
+            id="messageInput"
+            type="text"
+            placeholder="Type your message..."
+            required
+          />
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
