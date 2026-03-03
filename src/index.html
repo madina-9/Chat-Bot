@@ -3,38 +3,132 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Felix AI</title>
-    <link rel="stylesheet" href="styling.css" />
+    <title>Felix Chat</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="./components.js"></script>
   </head>
 
-  <body>
-    <div class="chat-wrapper">
-      <div class="chat-header">
-        <div class="pawprints">🐾 🐾</div>
-
-        <div>
-          <h1>Felix AI</h1>
-          <p>Your intelligent feline assistant</p>
+  <body class="min-h-screen bg-[#f7f5ef] text-black font-sans">
+    <div class="h-screen grid grid-cols-12">
+      <!-- Sidebar -->
+      <aside class="col-span-3 bg-white border-r border-[#ddd] flex flex-col">
+        <div class="p-5">
+          <button
+            class="w-full rounded-2xl bg-black text-white py-3 text-sm font-semibold shadow-sm hover:opacity-90 transition"
+          >
+            + New Chat
+          </button>
         </div>
-      </div>
 
-      <ul id="chatWindow" class="chat-window">
-        <li class="bot-message">Meow 🐾 I'm Felix. Ask me anything.</li>
-      </ul>
+        <div class="px-5 pb-3 text-xs uppercase tracking-wider text-gray-500">
+          Our memories
+        </div>
 
-      <div id="thinking" class="thinking hidden">purrrrocessing....</div>
+        <nav class="flex-1 px-3 space-y-2">
+          <button
+            class="w-full text-left rounded-2xl px-4 py-3 bg-[#efefef] border border-[#ddd]"
+          >
+            <div class="font-semibold">Felix Support</div>
+            <div class="text-xs text-gray-500">Active</div>
+          </button>
 
-      <form id="chatForm" class="input-area">
-        <input
-          id="messageInput"
-          type="text"
-          placeholder="Type your message..."
-          required
-        />
-        <button type="submit">Send</button>
-      </form>
+          <button
+            class="w-full text-left rounded-2xl px-4 py-3 hover:bg-[#f2f2f2]"
+          >
+            <div class="font-semibold">Morroco Spring Break Trip</div>
+          </button>
+
+          <button
+            class="w-full text-left rounded-2xl px-4 py-3 hover:bg-[#f2f2f2]"
+          >
+            <div class="font-semibold">Thriller Movies Recs</div>
+          </button>
+        </nav>
+
+        <div class="border-t border-[#ddd] p-5">
+          <div class="text-sm font-semibold">My Companion</div>
+        </div>
+      </aside>
+
+      <!-- Main Chat -->
+      <main class="col-span-9 flex flex-col bg-white">
+        <!-- Top Bar -->
+        <header
+          class="bg-black text-white px-6 py-4 flex items-center justify-between"
+        >
+          <div>
+            <div class="text-sm font-semibold">Felix AI</div>
+            <div class="text-xs opacity-70">
+              Your intelligent feline assistant
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button
+              type="button"
+              class="rounded-xl bg-white/10 px-4 py-2 text-xs font-medium hover:bg-white/20 transition"
+            >
+              Share
+            </button>
+
+            <button
+              type="button"
+              class="rounded-xl bg-white/10 px-4 py-2 text-xs font-medium hover:bg-white/20 transition"
+            >
+              Support
+            </button>
+          </div>
+        </header>
+
+        <!-- Messages -->
+        <section class="flex-1 overflow-y-auto px-10 py-8 bg-[#f7f5ef]">
+          <div class="max-w-3xl mx-auto space-y-5">
+            <felix-chat from="ai">
+              Meow 🐾 I'm Felix. Ask me anything.
+            </felix-chat>
+
+            <felix-chat from="user"> How to make basmati rice? </felix-chat>
+
+            <felix-chat from="ai">
+              Rinse basmati rice until clear, soak 20–30 minutes, then cook it
+              with a 1:1.5 rice-to-water ratio: bring to a boil, cover, simmer
+              10–12 minutes, and let it steam covered for 5–10 minutes before
+              fluffing. Avoid stirring, use precise water measurement, and
+              you’ll get long, separate, non-sticky grains every time.
+            </felix-chat>
+
+            <felix-chat from="user">
+              I also want to add cardamom. How much of it ans when do I add it?
+            </felix-chat>
+
+            <felix-chat from="ai">
+              Add 2 lightly crushed green cardamom pods to the water at the very
+              start of cooking (crack them open but don’t grind), optionally
+              with bay leaf and cloves, and remove the whole spices before
+              serving for a balanced, integrated aroma without overpowering the
+              rice.
+            </felix-chat>
+          </div>
+        </section>
+
+        <!-- Input -->
+        <footer class="border-t border-[#ddd] bg-white px-8 py-6">
+          <div class="max-w-3xl mx-auto flex gap-4 items-end">
+            <textarea
+              rows="2"
+              class="flex-1 rounded-2xl border border-[#ddd] bg-[#f7f5ef] px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-black"
+              placeholder="Type a message for Felix…"
+            ></textarea>
+
+            <button
+              class="rounded-2xl bg-black text-white px-6 py-3 text-sm font-semibold hover:opacity-90 transition"
+            >
+              Send
+            </button>
+          </div>
+        </footer>
+      </main>
     </div>
-
-    <script src="app.js"></script>
   </body>
 </html>
