@@ -6,7 +6,7 @@
     <title>Felix Chat</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <script type="module" src="./components.js"></script>
+    <script type="module" src="./main.js"></script>
   </head>
 
   <body class="min-h-screen bg-[#f7f5ef] text-black font-sans">
@@ -83,50 +83,29 @@
 
         <!-- Messages -->
         <section class="flex-1 overflow-y-auto px-10 py-8 bg-[#f7f5ef]">
-          <div class="max-w-3xl mx-auto space-y-5">
-            <felix-chat from="ai">
-              Meow 🐾 I'm Felix. Ask me anything.
-            </felix-chat>
-
-            <felix-chat from="user"> How to make basmati rice? </felix-chat>
-
-            <felix-chat from="ai">
-              Rinse basmati rice until clear, soak 20–30 minutes, then cook it
-              with a 1:1.5 rice-to-water ratio: bring to a boil, cover, simmer
-              10–12 minutes, and let it steam covered for 5–10 minutes before
-              fluffing. Avoid stirring, use precise water measurement, and
-              you’ll get long, separate, non-sticky grains every time.
-            </felix-chat>
-
-            <felix-chat from="user">
-              I also want to add cardamom. How much of it ans when do I add it?
-            </felix-chat>
-
-            <felix-chat from="ai">
-              Add 2 lightly crushed green cardamom pods to the water at the very
-              start of cooking (crack them open but don’t grind), optionally
-              with bay leaf and cloves, and remove the whole spices before
-              serving for a balanced, integrated aroma without overpowering the
-              rice.
-            </felix-chat>
-          </div>
+          <div
+            id="messages-container"
+            class="max-w-3xl mx-auto space-y-5"
+          ></div>
         </section>
 
         <!-- Input -->
         <footer class="border-t border-[#ddd] bg-white px-8 py-6">
-          <div class="max-w-3xl mx-auto flex gap-4 items-end">
+          <form id="chat-form" class="max-w-3xl mx-auto flex gap-4 items-end">
             <textarea
+              id="message-input"
               rows="2"
               class="flex-1 rounded-2xl border border-[#ddd] bg-[#f7f5ef] px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-black"
               placeholder="Type a message for Felix…"
             ></textarea>
 
             <button
+              type="submit"
               class="rounded-2xl bg-black text-white px-6 py-3 text-sm font-semibold hover:opacity-90 transition"
             >
               Send
             </button>
-          </div>
+          </form>
         </footer>
       </main>
     </div>
