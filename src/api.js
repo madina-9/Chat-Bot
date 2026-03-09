@@ -1,4 +1,4 @@
-const API_KEY = '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';
+const API_KEY = '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';
 const MODEL = 'arcee-ai/trinity-large-preview:free';
 
 export async function streamChat(messages, onDelta) {
