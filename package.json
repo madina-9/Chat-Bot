@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint .",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "format:check": "prettier --check ."
   },
   "repository": {
     "type": "git",
@@ -23,16 +23,6 @@
     "@eslint/js": "^9.39.3",
     "eslint": "^9.39.3",
     "globals": "^17.3.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
     "prettier": "^3.8.1"
-  },
-  "lint-staged": {
-    "*.{js,html,css}": [
-      "prettier --write"
-    ],
-    "*.js": [
-      "eslint --fix"
-    ]
   }
 }
