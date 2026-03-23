@@ -5,28 +5,33 @@ function MessageInput({ onSend, disabled }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!input.trim() || disabled) return; // prevent empty sends or double sends
+    if (!input.trim() || disabled) return; 
 
     onSend(input);
     setInput("");
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex p-4">
-      <input
-        className="flex-1 border p-2"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        disabled={disabled} 
-      />
-      <button 
-        type="submit" 
-        className={`ml-2 px-4 text-white ${disabled ? 'bg-gray-400' : 'bg-blue-500'}`}
-        disabled={disabled} 
-      >
-        {disabled ? 'Sending...' : 'Send'}
-      </button>
-    </form>
+    <footer className="border-t border-[#ddd] bg-white px-8 py-6">
+      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto flex gap-4 items-end">
+        <input
+          className={`flex-1 rounded-2xl border border-[#ddd] bg-[#f7f5ef] px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-black ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
+          placeholder="Type a message for Felix…"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          disabled={disabled} 
+        />
+        <button 
+          type="submit" 
+          className={`rounded-2xl px-6 py-3 text-sm font-semibold transition ${
+            disabled ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-black text-white hover:opacity-90'
+          }`}
+          disabled={disabled} 
+        >
+          {disabled ? 'Wait...' : 'Send'}
+        </button>
+      </form>
+    </footer>
   );
 }
 

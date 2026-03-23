@@ -8,10 +8,11 @@ function App() {
   const [messages, setMessages] = useState([]);
 
   return (
-    <div className="flex h-screen">
+    <div className="h-screen grid grid-cols-12 bg-[#f7f5ef] text-black font-sans">
       <Sidebar
         conversations={conversations}
         setConversations={setConversations}
+        activeConversationId={activeConversationId}
         setActiveConversationId={setActiveConversationId}
       />
 
