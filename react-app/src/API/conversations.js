@@ -1,6 +1,6 @@
 let conversations = [
-  { id: 1, title: "Chat 1" },
-  { id: 2, title: "Chat 2" }
+  { id: 1, title: "New chat" },
+  { id: 2, title: "Meaning of life" }
 ];
 
 export function getConversations() {

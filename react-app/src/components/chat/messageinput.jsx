@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-function MessageInput({ onSend }) {
+function MessageInput({ onSend, disabled }) {
   const [input, setInput] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!input) return;
+    if (!input.trim() || disabled) return; // prevent empty sends or double sends
 
     onSend(input);
     setInput("");
@@ -17,9 +17,14 @@ function MessageInput({ onSend }) {
         className="flex-1 border p-2"
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        disabled={disabled} 
       />
-      <button className="ml-2 bg-blue-500 text-white px-4">
-        Send
+      <button 
+        type="submit" 
+        className={`ml-2 px-4 text-white ${disabled ? 'bg-gray-400' : 'bg-blue-500'}`}
+        disabled={disabled} 
+      >
+        {disabled ? 'Sending...' : 'Send'}
       </button>
     </form>
   );
