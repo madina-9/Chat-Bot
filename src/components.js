@@ -27,6 +27,7 @@ class FelixChat extends HTMLElement {
       </div>
     `;
   }
+  // comment chnage
 
   _escapeHtml(str) {
     return str
