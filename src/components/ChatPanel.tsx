@@ -1,61 +1,53 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import Message from "@/components/Message";
-import MessageInput from "@/components/MessageInput";
-import { useMessages, useAddMessage } from "@/hooks/useMessages";
+import { useEffect, useRef } from 'react';
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport, type UIMessage } from 'ai';
+import Message from '@/components/Message';
+import MessageInput from '@/components/MessageInput';
 
 interface ChatPanelProps {
   conversationId: string;
+  initialMessages: UIMessage[];
 }
 
-export default function ChatPanel({ conversationId }: ChatPanelProps) {
-  const { data: messages = [] } = useMessages(conversationId);
-  const { mutateAsync: addMessage } = useAddMessage(conversationId);
-  const [loading, setLoading] = useState(false);
+export default function ChatPanel({
+  conversationId,
+  initialMessages,
+}: ChatPanelProps) {
+  // useChat handles streaming tokens, optimistic user messages, and abort on
+  // navigation — no manual SSE parsing or state management needed.
+  const { messages, sendMessage, status, error } = useChat({
+    id: conversationId,
+    messages: initialMessages,
+    transport: new DefaultChatTransport({ api: '/api/chat' }),
+  });
+
   const bottomRef = useRef<HTMLDivElement>(null);
+  // "submitted" = waiting for first token; "streaming" = tokens arriving
+  const isPending = status === 'submitted' || status === 'streaming';
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
-  async function handleSend(content: string) {
-    const aiHistory = [...messages, { role: "user", content }];
-    setLoading(true);
-
+  function handleSend(text: string) {
+    let pushSubscription: unknown;
     try {
-      await addMessage({ role: "user", content });
-
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: aiHistory }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to get AI response");
-      }
-
-      await addMessage({ role: data.role, content: data.content });
-    } catch (error) {
-      console.error("Error fetching AI response:", error);
-      await addMessage({
-        role: "assistant",
-        content: "Error: Could not get response.",
-      });
-    } finally {
-      setLoading(false);
-    }
+      const raw = localStorage.getItem('pushSub');
+      if (raw) pushSubscription = JSON.parse(raw);
+    } catch {}
+    sendMessage({ text }, { body: { conversationId, pushSubscription } });
   }
 
   return (
-    <main className="col-span-9 flex flex-col bg-white">
+    <main className="flex-1 flex flex-col bg-white min-h-0 overflow-hidden">
       <header className="bg-black text-white px-6 py-4 flex items-center justify-between">
         <div>
           <div className="text-sm font-semibold">Felix AI</div>
-          <div className="text-xs opacity-70">Your intelligent feline assistant</div>
+          <div className="text-xs opacity-70">
+            Your intelligent feline assistant
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -73,13 +65,23 @@ export default function ChatPanel({ conversationId }: ChatPanelProps) {
         </div>
       </header>
 
-      <section className="flex-1 overflow-y-auto px-10 py-8 bg-[#f7f5ef]">
+      <section className="flex-1 overflow-y-auto px-4 py-6 md:px-10 md:py-8 bg-[#f7f5ef]">
         <div className="max-w-3xl mx-auto space-y-5">
-          {messages.map((m, i) => (
-            <Message key={m.id ?? i} message={m} />
-          ))}
+          {messages.map((m) => {
+            // UIMessage uses a parts array; extract the text part for display
+            const textPart = m.parts.find(
+              (p): p is { type: 'text'; text: string } => p.type === 'text',
+            );
+            return (
+              <Message
+                key={m.id}
+                message={{ role: m.role, content: textPart?.text ?? '' }}
+              />
+            );
+          })}
 
-          {loading && (
+          {/* Show typing indicator while waiting for the first token */}
+          {status === 'submitted' && (
             <div className="w-full flex justify-start">
               <div className="text-gray-500 italic px-5 py-2 text-sm">
                 purrrocessing...
@@ -87,11 +89,17 @@ export default function ChatPanel({ conversationId }: ChatPanelProps) {
             </div>
           )}
 
+          {error && (
+            <p className="text-red-500 text-sm px-5">
+              Failed to send message. Please try again.
+            </p>
+          )}
+
           <div ref={bottomRef} />
         </div>
       </section>
 
-      <MessageInput onSend={handleSend} disabled={loading} />
+      <MessageInput onSend={handleSend} disabled={isPending} />
     </main>
   );
 }

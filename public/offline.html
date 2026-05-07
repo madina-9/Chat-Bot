@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Felix AI — Offline</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #f7f5ef;
+        color: #111;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      header {
+        background: #000;
+        color: #fff;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      header img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+      }
+      header .name {
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+      header .tagline {
+        font-size: 0.7rem;
+        opacity: 0.65;
+      }
+      .content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #e5e0d8;
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        max-width: 340px;
+        width: 100%;
+      }
+      .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+      h1 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      p {
+        font-size: 0.875rem;
+        color: #666;
+        line-height: 1.55;
+        margin-bottom: 1.25rem;
+      }
+      button {
+        background: #000;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 0.6rem 1.4rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <img src="/felix-192.png" alt="Felix" />
+      <div>
+        <div class="name">Felix AI</div>
+        <div class="tagline">Your intelligent feline assistant</div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="card">
+        <div class="icon">🐱</div>
+        <h1>You're offline</h1>
+        <p>
+          Felix can't reach the internet right now.<br />
+          Check your connection and try again.
+        </p>
+        <button onclick="location.reload()">Try again</button>
+      </div>
+    </div>
+  </body>
+</html>
