@@ -5,3 +5,5 @@ build/
 .next/
 .env.local
 *.tsbuildinfo
+
+/src/generated/prisma

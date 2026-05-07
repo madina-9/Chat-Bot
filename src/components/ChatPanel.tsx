@@ -1,54 +1,50 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Message from "@/components/Message";
 import MessageInput from "@/components/MessageInput";
-import { getMessages, addMessage } from "@/API/messages";
-import { fetchAIResponse } from "@/API/openrouter";
-
-interface ChatMessage {
-  role: string;
-  content: string;
-}
+import { useMessages, useAddMessage } from "@/hooks/useMessages";
 
 interface ChatPanelProps {
   conversationId: string;
 }
 
 export default function ChatPanel({ conversationId }: ChatPanelProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const { data: messages = [] } = useMessages(conversationId);
+  const { mutateAsync: addMessage } = useAddMessage(conversationId);
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    getMessages(conversationId).then(setMessages);
-  }, [conversationId]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
   async function handleSend(content: string) {
-    const userMsg: ChatMessage = { role: "user", content };
-
-    setMessages((prev) => [...prev, userMsg]);
+    const aiHistory = [...messages, { role: "user", content }];
     setLoading(true);
 
     try {
-      await addMessage(conversationId, userMsg);
+      await addMessage({ role: "user", content });
 
-      const currentMessages = await getMessages(conversationId);
-      const aiMsg = await fetchAIResponse(currentMessages);
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: aiHistory }),
+      });
 
-      await addMessage(conversationId, aiMsg);
-      setMessages((prev) => [...prev, aiMsg]);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to get AI response");
+      }
+
+      await addMessage({ role: data.role, content: data.content });
     } catch (error) {
       console.error("Error fetching AI response:", error);
-      const errorMsg: ChatMessage = {
+      await addMessage({
         role: "assistant",
         content: "Error: Could not get response.",
-      };
-      setMessages((prev) => [...prev, errorMsg]);
+      });
     } finally {
       setLoading(false);
     }
@@ -80,7 +76,7 @@ export default function ChatPanel({ conversationId }: ChatPanelProps) {
       <section className="flex-1 overflow-y-auto px-10 py-8 bg-[#f7f5ef]">
         <div className="max-w-3xl mx-auto space-y-5">
           {messages.map((m, i) => (
-            <Message key={i} message={m} />
+            <Message key={m.id ?? i} message={m} />
           ))}
 
           {loading && (

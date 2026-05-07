@@ -1,20 +1,15 @@
-const messagesDB: Record<string, { role: string; content: string }[]> = {
-  "1": [
-    { role: "user", content: "Hello" },
-    { role: "assistant", content: "Hi! How can I help you today?" },
-  ],
-  "2": [
-    { role: "user", content: "What is the meaning of life?" },
-    { role: "assistant", content: "Treats." },
-  ],
-};
+import { prisma } from "@/lib/prisma";
 
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  return Response.json(messagesDB[id] || []);
+  const messages = await prisma.message.findMany({
+    where: { conversationId: id },
+    orderBy: { createdAt: "asc" },
+  });
+  return Response.json(messages);
 }
 
 export async function POST(
@@ -22,8 +17,13 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const message = await request.json();
-  if (!messagesDB[id]) messagesDB[id] = [];
-  messagesDB[id].push(message);
+  const body = await request.json();
+  const message = await prisma.message.create({
+    data: {
+      role: body.role,
+      content: body.content,
+      conversationId: id,
+    },
+  });
   return Response.json(message);
 }
