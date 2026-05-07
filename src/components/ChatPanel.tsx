@@ -41,7 +41,7 @@ export default function ChatPanel({
   }
 
   return (
-    <main className="col-span-9 flex flex-col bg-white">
+    <main className="flex-1 flex flex-col bg-white min-h-0 overflow-hidden">
       <header className="bg-black text-white px-6 py-4 flex items-center justify-between">
         <div>
           <div className="text-sm font-semibold">Felix AI</div>
@@ -65,7 +65,7 @@ export default function ChatPanel({
         </div>
       </header>
 
-      <section className="flex-1 overflow-y-auto px-10 py-8 bg-[#f7f5ef]">
+      <section className="flex-1 overflow-y-auto px-4 py-6 md:px-10 md:py-8 bg-[#f7f5ef]">
         <div className="max-w-3xl mx-auto space-y-5">
           {messages.map((m) => {
             // UIMessage uses a parts array; extract the text part for display

@@ -10,9 +10,13 @@ import {
 
 interface SidebarProps {
   initialConversations: Conversation[];
+  onNavigate?: () => void;
 }
 
-export default function Sidebar({ initialConversations }: SidebarProps) {
+export default function Sidebar({
+  initialConversations,
+  onNavigate,
+}: SidebarProps) {
   // initialConversations is server-fetched data passed in on first render.
   // useConversations seeds the TanStack cache with it so there is no loading
   // spinner on first paint; mutations then update the cache optimistically.
@@ -23,10 +27,13 @@ export default function Sidebar({ initialConversations }: SidebarProps) {
   const router = useRouter();
 
   return (
-    <aside className="col-span-3 bg-white border-r border-[#ddd] flex flex-col">
+    <aside className="h-full bg-white border-r border-[#ddd] flex flex-col">
       <div className="p-5">
         <button
-          onClick={() => createConversation('New chat')}
+          onClick={() => {
+            createConversation('New chat');
+            onNavigate?.();
+          }}
           className="w-full rounded-2xl bg-black text-white py-3 text-sm font-semibold shadow-sm hover:opacity-90 transition"
         >
           + New Chat
@@ -43,7 +50,10 @@ export default function Sidebar({ initialConversations }: SidebarProps) {
           return (
             <div key={c.id} className="flex items-center gap-1">
               <button
-                onClick={() => router.push(`/chat/${c.id}`)}
+                onClick={() => {
+                  router.push(`/chat/${c.id}`);
+                  onNavigate?.();
+                }}
                 className={`flex-1 text-left rounded-2xl px-4 py-3 transition ${
                   isActive
                     ? 'bg-[#efefef] border border-[#ddd]'
