@@ -3,7 +3,13 @@ node_modules/
 dist/
 build/
 .next/
+.env
 .env.local
+.env*.local
 *.tsbuildinfo
+*.db
+.husky/
+*.pdf
+Screenshot*.png
 
 /src/generated/prisma

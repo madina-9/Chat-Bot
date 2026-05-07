@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, type UIMessage } from "ai";
-import Message from "@/components/Message";
-import MessageInput from "@/components/MessageInput";
+import { useEffect, useRef } from 'react';
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport, type UIMessage } from 'ai';
+import Message from '@/components/Message';
+import MessageInput from '@/components/MessageInput';
 
 interface ChatPanelProps {
   conversationId: string;
@@ -20,20 +20,24 @@ export default function ChatPanel({
   const { messages, sendMessage, status, error } = useChat({
     id: conversationId,
     messages: initialMessages,
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    transport: new DefaultChatTransport({ api: '/api/chat' }),
   });
 
   const bottomRef = useRef<HTMLDivElement>(null);
   // "submitted" = waiting for first token; "streaming" = tokens arriving
-  const isPending = status === "submitted" || status === "streaming";
+  const isPending = status === 'submitted' || status === 'streaming';
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   function handleSend(text: string) {
-    // Extra body fields are merged into the POST body sent to /api/chat
-    sendMessage({ text }, { body: { conversationId } });
+    let pushSubscription: unknown;
+    try {
+      const raw = localStorage.getItem('pushSub');
+      if (raw) pushSubscription = JSON.parse(raw);
+    } catch {}
+    sendMessage({ text }, { body: { conversationId, pushSubscription } });
   }
 
   return (
@@ -41,7 +45,9 @@ export default function ChatPanel({
       <header className="bg-black text-white px-6 py-4 flex items-center justify-between">
         <div>
           <div className="text-sm font-semibold">Felix AI</div>
-          <div className="text-xs opacity-70">Your intelligent feline assistant</div>
+          <div className="text-xs opacity-70">
+            Your intelligent feline assistant
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -64,18 +70,18 @@ export default function ChatPanel({
           {messages.map((m) => {
             // UIMessage uses a parts array; extract the text part for display
             const textPart = m.parts.find(
-              (p): p is { type: "text"; text: string } => p.type === "text"
+              (p): p is { type: 'text'; text: string } => p.type === 'text',
             );
             return (
               <Message
                 key={m.id}
-                message={{ role: m.role, content: textPart?.text ?? "" }}
+                message={{ role: m.role, content: textPart?.text ?? '' }}
               />
             );
           })}
 
           {/* Show typing indicator while waiting for the first token */}
-          {status === "submitted" && (
+          {status === 'submitted' && (
             <div className="w-full flex justify-start">
               <div className="text-gray-500 italic px-5 py-2 text-sm">
                 purrrocessing...
