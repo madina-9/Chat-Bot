@@ -5,25 +5,28 @@ import {
   useConversations,
   useCreateConversation,
   useDeleteConversation,
+  type Conversation,
 } from "@/hooks/useConversations";
 
-export default function Sidebar() {
-  const { data: conversations = [] } = useConversations();
-  const { mutateAsync: createConversation } = useCreateConversation();
+interface SidebarProps {
+  initialConversations: Conversation[];
+}
+
+export default function Sidebar({ initialConversations }: SidebarProps) {
+  // initialConversations is server-fetched data passed in on first render.
+  // useConversations seeds the TanStack cache with it so there is no loading
+  // spinner on first paint; mutations then update the cache optimistically.
+  const { data: conversations = [] } = useConversations(initialConversations);
+  const { mutate: createConversation } = useCreateConversation();
   const { mutate: deleteConversation } = useDeleteConversation();
   const pathname = usePathname();
   const router = useRouter();
-
-  async function handleNewChat() {
-    const newConv = await createConversation("New chat");
-    router.push(`/chat/${newConv.id}`);
-  }
 
   return (
     <aside className="col-span-3 bg-white border-r border-[#ddd] flex flex-col">
       <div className="p-5">
         <button
-          onClick={handleNewChat}
+          onClick={() => createConversation("New chat")}
           className="w-full rounded-2xl bg-black text-white py-3 text-sm font-semibold shadow-sm hover:opacity-90 transition"
         >
           + New Chat
@@ -65,7 +68,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="border-t border-[#ddd] p-5 flex items-center gap-3">
-        <div className="w-10 h10  rounded-full overflow-hidden flex-shrink-0">
+        <div className="w-10 h10 rounded-full overflow-hidden flex-shrink-0">
           <img
             src="/cat.jpg"
             alt="My Companion"
