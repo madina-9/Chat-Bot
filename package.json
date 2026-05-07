@@ -11,8 +11,11 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@ai-sdk/openai-compatible": "^2.0.41",
+    "@ai-sdk/react": "^3.0.160",
     "@prisma/client": "^6.19.3",
     "@tanstack/react-query": "^5.96.2",
+    "ai": "^6.0.158",
     "next": "^15.0.0",
     "prisma": "^6.19.3",
     "react": "^19.0.0",

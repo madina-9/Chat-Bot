@@ -1,5 +1,3 @@
-"use client";
-
 interface MessageProps {
   message: { role: string; content: string };
 }
